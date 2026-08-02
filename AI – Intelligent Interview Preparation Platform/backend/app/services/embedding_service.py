@@ -24,3 +24,15 @@ class EmbeddingService:
         )
 
         return embeddings.tolist()
+
+    def generate_query_embedding(
+            self,
+            question: str
+    ) -> list[float]:
+        embedding = self.model.encode(
+            question,
+            normalize_embeddings=True
+        )
+
+        return embedding.tolist()
+embedding_service = EmbeddingService()

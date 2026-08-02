@@ -22,3 +22,4 @@ aiofiles
 watchfiles
 sentence_transformers
 chromadb
+groq

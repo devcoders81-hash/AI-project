@@ -12,52 +12,60 @@ import asyncio
 
 @celery.task(name="process_resume")
 def process_resume(resume_id: str):
-    asyncio.run(_process_resume(resume_id))
+    import asyncio
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
+    try:
+        loop.run_until_complete(_process_resume(resume_id))
+    finally:
+        loop.close()
 
 
 async def _process_resume(resume_id: str):
-    db = AsyncSessionLocal()
+    async with AsyncSessionLocal() as db:
 
-    try:
-        repository = ResumeRepository(db=db)
-        embedding_service = EmbeddingService()
+        try:
+            repository = ResumeRepository(db=db)
+            embedding_service = EmbeddingService()
 
-        resume = await repository.get_resume(resume_id)
-        print("=" * 70)
-        print(f"Resume ID : {resume.id}")
-        print(f"File Path : {resume.file_path}")
-        print("=" * 70)
-        text = PDFService.extract_text(resume.file_path)
-        print("=" * 70)
-        print(f"Extracted {len(text)} characters")
-        clean_text = TextCleaner.clean(text)
-        print(f"Clean Length : {len(clean_text)}")
-        print("=" * 70)
-        chunk_service = ChunkingService()
+            resume = await repository.get_resume(resume_id)
+            print("=" * 70)
+            print(f"Resume ID : {resume.id}")
+            print(f"File Path : {resume.file_path}")
+            print("=" * 70)
+            text = PDFService.extract_text(resume.file_path)
+            print("=" * 70)
+            print(f"Extracted {len(text)} characters")
+            clean_text = TextCleaner.clean(text)
+            print(f"Clean Length : {len(clean_text)}")
+            print("=" * 70)
+            chunk_service = ChunkingService()
 
-        chunks = chunk_service.chunk_text(text)
-        print("=" * 70)
-        print(f"Total Chunks : {len(chunks)}")
-        embeddings = embedding_service.generate_embeddings(chunks)
+            chunks = chunk_service.chunk_text(text)
+            print("=" * 70)
+            print(f"Total Chunks : {len(chunks)}")
+            embeddings = embedding_service.generate_embeddings(chunks)
 
-        print(f"Generated {len(embeddings)} embeddings")
-        print(len(embeddings[0]))
-        print("=" * 70)
-        vector_store_service.save_chunks(
+            print(f"Generated {len(embeddings)} embeddings")
+            print(len(embeddings[0]))
+            print("=" * 70)
+            vector_store_service.save_chunks(
 
-            resume_id=str(resume.id),
+                resume_id=str(resume.id),
 
-            chunks=chunks,
+                chunks=chunks,
 
-            embeddings=embeddings
+                embeddings=embeddings
 
-        )
+            )
 
-        print(f"Saved {len(chunks)} chunks into ChromaDB")
-        print("=" * 70)
+            print(f"Saved {len(chunks)} chunks into ChromaDB")
+            print("=" * 70)
 
-    finally:
-        await db.close()
+        finally:
+            await db.close()
 
         # Step 2
         # Update Status -> PROCESSING

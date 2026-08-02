@@ -33,6 +33,8 @@ class Settings(BaseSettings):
     CELERY_RESULT_BACKEND: str
     REDIS_URL :str
     UPLOAD_DIRECTORY:str
+    GROQ_API_KEY:str
+    GROQ_MODEL:str
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=False,

@@ -47,14 +47,21 @@ class VectorStoreService:
         )
 
     def search(
-        self,
-        embedding: list[float],
-        top_k: int = 5
+            self,
+            resume_id: str,
+            embedding: list[float],
+            top_k: int = 5,
     ):
-
         return self.collection.query(
+
             query_embeddings=[embedding],
-            n_results=top_k
+
+            n_results=top_k,
+
+            where={
+                "resume_id": resume_id
+            }
+
         )
 
 
