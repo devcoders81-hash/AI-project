@@ -29,6 +29,10 @@ class BaseRepository(Generic[ModelType]):
         await self.db.refresh(obj)
 
         return obj
+    async def create_all(self,obj:list[ModelType]) -> list[ModelType]:
+        self.db.add_all(obj)
+        await self.db.commit()
+        return obj
 
     async def get_by_id(
         self,

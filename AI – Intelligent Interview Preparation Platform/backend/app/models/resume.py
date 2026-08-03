@@ -4,8 +4,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import String
 from sqlalchemy import Integer
 from sqlalchemy import Enum
-
-from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import Mapped, relationship
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -52,4 +51,9 @@ class Resume(BaseModel):
         Enum(ResumeStatus),
         nullable=False,
         default=ResumeStatus.UPLOADED,
+    )
+    interviews = relationship(
+        "Interview",
+        back_populates="resume",
+        cascade="all, delete-orphan",
     )

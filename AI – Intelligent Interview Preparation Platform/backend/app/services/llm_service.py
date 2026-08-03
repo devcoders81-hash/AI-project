@@ -1,3 +1,5 @@
+import json
+
 from groq import Groq
 
 from app.core.config import settings
@@ -54,6 +56,72 @@ class LLMService:
         )
 
         return response.choices[0].message.content.strip()
+
+    def generate(self, prompt: str) -> str:
+        response = self.client.chat.completions.create(
+            model=settings.GROQ_MODEL,
+            temperature=0,
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
+
+        return response.choices[0].message.content.strip()
+
+    def evaluate_answer(
+            self,
+            question: str,
+            candidate_answer: str,
+    ):
+        prompt = f"""
+        You are a Senior Technical Interviewer.
+        
+        Evaluate the candidate's answer.
+        
+        Interview Question:
+        {question}
+        
+        Candidate Answer:
+        {candidate_answer}
+        
+        Evaluate using these criteria:
+        1. Technical correctness
+        2. Completeness
+        3. Communication
+        4. Best practices
+        
+        Return ONLY valid JSON.
+        
+        Example:
+        
+        {{
+            "score": 8,
+            "feedback": "Good understanding of the concept. The answer is technically correct but misses some edge cases."
+        }}
+        """
+
+        response = self.client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are an expert technical interviewer."
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.2,
+            response_format={"type": "json_object"},
+        )
+
+        result = response.choices[0].message.content
+
+        return json.loads(result)
 
 
 llm_service = LLMService()

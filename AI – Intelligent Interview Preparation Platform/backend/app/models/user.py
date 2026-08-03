@@ -6,7 +6,6 @@ from sqlalchemy import String
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
-
 from app.models.base_model import BaseModel
 
 
@@ -53,4 +52,9 @@ class User(BaseModel):
         "Resume",
         backref="user",
         lazy="selectin",
+    )
+    interviews = relationship(
+        "Interview",
+        back_populates="user",
+        cascade="all, delete-orphan",
     )

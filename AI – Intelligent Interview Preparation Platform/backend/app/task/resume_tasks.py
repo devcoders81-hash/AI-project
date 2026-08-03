@@ -3,6 +3,7 @@ from app.services.chunking_service import ChunkingService
 from app.services.embedding_service import EmbeddingService
 from app.services.text_cleaner import TextCleaner
 from app.services.vector_store_service import vector_store_service
+import app.models
 print("resume_tasks imported")
 from app.worker.celery_app import celery
 from app.db.session import AsyncSessionLocal

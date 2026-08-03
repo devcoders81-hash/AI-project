@@ -12,3 +12,7 @@ class UserNotFoundException(Exception):
 
 class InvalidRefreshTokenException(Exception):
     pass
+
+class QuestionNotFoundException(Exception):
+    def __init__(self, interview_id):
+        self.interview_id = interview_id
