@@ -13,7 +13,8 @@ export const uploadResume = async (
             },
         },
     );
-
+    localStorage.setItem("resumeId", response.data.id);
+    //console.log("Resume uploaded successfully:", response.data);
     return response.data;
 
 };
@@ -21,7 +22,7 @@ export const uploadResume = async (
 export const getResumes = async () => {
 
     const response = await api.get(
-        "/resumes",
+        "/resumes/all",
     );
 
     return response.data;

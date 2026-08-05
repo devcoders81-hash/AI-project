@@ -1,37 +1,47 @@
-interface Props{
+import type { ReactNode } from "react";
 
-    title:string;
-
-    value:string;
-
+interface Props {
+    title: string;
+    value: string;
+    icon?: ReactNode;
 }
 
 export default function Card({
-
     title,
-
     value,
+    icon,
+}: Props) {
+    return (
+        <div className="
+            bg-white 
+            rounded-2xl 
+            shadow-md 
+            p-6
+            hover:shadow-lg
+            transition
+        ">
+            <div className="
+                flex 
+                justify-between 
+                items-center 
+                text-indigo-600
+                mb-4
+            ">
+                {icon}
+            </div>
 
-}:Props){
-
-    return(
-
-        <div className="bg-white rounded-xl shadow p-6">
-
-            <p className="text-gray-500">
-
+            <p className="text-gray-500 text-sm">
                 {title}
-
             </p>
 
-            <h2 className="text-4xl font-bold mt-3">
-
+            <h2 className="
+                text-4xl 
+                font-bold 
+                mt-3 
+                text-slate-900
+            ">
                 {value}
-
             </h2>
-
         </div>
-
-    )
-
+    );
 }

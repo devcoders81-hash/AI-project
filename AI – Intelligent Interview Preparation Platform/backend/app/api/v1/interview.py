@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends
 
 from app.dependencies.security import get_current_user
 from app.dependencies.get_interview_service import get_interview_service
+from app.models import User
 
 from app.schemas.interview_schema import (
     InterviewCreateRequest,
@@ -56,10 +57,11 @@ async def submit_answer(
 )
 async def get_next_question(
     interview_id: UUID,
+        current_user:User=Depends(get_current_user),
     service: InterviewService = Depends(get_interview_service),
 ):
     try:
-        return await service.get_question(interview_id)
+        return await service.get_question(interview_id,current_user.id)
     except Exception as ex:
         print(ex)
         return {

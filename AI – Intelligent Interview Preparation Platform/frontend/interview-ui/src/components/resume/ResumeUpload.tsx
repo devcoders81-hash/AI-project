@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { uploadResume } from "../../api/resumeApi";
+import { useNavigate } from "react-router-dom";
 
 export default function ResumeUpload() {
+    const navigate = useNavigate();
 
     const [file, setFile] = useState<File | null>(null);
 
@@ -24,7 +26,11 @@ export default function ResumeUpload() {
 
             setLoading(true);
 
-            await uploadResume(formData);
+            const response=await uploadResume(formData);
+            const id = response.id;
+            console.log("Resume uploaded successfully:", id);
+            //await new Promise(resolve => setTimeout(resolve, 2 * 60 * 1000));
+            navigate(`/dashboard`);
 
             alert("Resume uploaded successfully.");
 

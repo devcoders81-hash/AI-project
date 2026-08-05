@@ -5,26 +5,24 @@ import { useNavigate } from "react-router-dom";
 import ResumeTable from "../components/resume/ResumeTable";
 
 import { getResumes } from "../api/resumeApi";
+import type { Resume } from "../types/resume";
 
 export default function ResumePage() {
   const navigate = useNavigate();
 
-  const [resumes, setResumes] = useState([]);
+  const [resumes, setResumes] = useState<Resume[]>([]);
 
   const loadResumes = async () => {
-    const data = await getResumes();
-
-    setResumes(data);
+    try {
+      const data = await getResumes();
+      setResumes(data);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
     loadResumes();
-
-    const interval = setInterval(() => {
-      loadResumes();
-    }, 5000);
-
-    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -44,6 +42,9 @@ export default function ResumePage() {
         resumes={resumes}
         onStartInterview={(resumeId) =>
           navigate(`/interview/create/${resumeId}`)
+        }
+        onGenerateInterview={(resumeId) =>
+          navigate(`/interview/generate/${resumeId}`)
         }
       />
     </div>

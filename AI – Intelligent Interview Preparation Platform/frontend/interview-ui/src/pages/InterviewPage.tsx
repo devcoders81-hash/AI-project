@@ -24,9 +24,11 @@ export default function InterviewPage() {
   const [score, setScore] = useState<number | null>(null);
 
   const loadQuestion = async () => {
+    console.log("Loading question for resume ID:", id);
     if (!id) return;
 
     try {
+      
       setLoading(true);
 
       const response = await getNextQuestion(id);
@@ -36,6 +38,7 @@ export default function InterviewPage() {
       setAnswer("");
 
       setFeedback("");
+      console.log("Question loaded:", response);
 
       setScore(null);
     } catch (error) {

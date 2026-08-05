@@ -1,13 +1,14 @@
 from app.schemas.chat_schema import ChatRequest, ChatResponse
 from app.services.embedding_service import EmbeddingService
 from app.services.llm_service import llm_service
-from app.services.vector_store_service import vector_store_service
+from app.services.vector_store_service import VectorStoreService
 
 
 class ChatService:
 
     def __init__(self):
         self.embedding_service = EmbeddingService()
+        self.vector_store = VectorStoreService()
 
     def chat(
             self,
@@ -21,7 +22,7 @@ class ChatService:
         )
 
         # Step 2: Search ChromaDB
-        results = vector_store_service.search(
+        results = self.vector_store.search(
             embedding=query_embedding,
             top_k=5,
             resume_id=str(resume_id)   # remove if you haven't added filtering yet

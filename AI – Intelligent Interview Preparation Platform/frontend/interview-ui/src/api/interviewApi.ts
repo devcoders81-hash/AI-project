@@ -3,20 +3,27 @@ import type {
   InterviewQuestion,
   SubmitAnswerRequest,
   SubmitAnswerResponse,
+  GenerateInterview,
 } from "../types/interview";
 
-export const createInterview = async (resumeId: string) => {
+export const createInterview = async (data: GenerateInterview) => {
   const response = await api.post("/api/v1/interviews", {
-    resume_id: resumeId,
+    data,
   });
 
   return response.data;
 };
+export const generateInterview = async (data: GenerateInterview) => {
+  const response = await api.post("/interviews",data);
+
+  return response.data;
+
+};
 
 export const getNextQuestion = async (
-  interviewId: string,
+  resumeId: string,
 ): Promise<InterviewQuestion> => {
-  const response = await api.get(`/interviews/${interviewId}/question`);
+  const response = await api.get(`/interviews/${resumeId}/question`);
 
   return response.data;
 };

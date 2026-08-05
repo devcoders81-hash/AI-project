@@ -1,13 +1,23 @@
 from sentence_transformers import SentenceTransformer
 from app.core.config import settings
 
-
-class EmbeddingService:
-
-    def __init__(self):
-        self.model = SentenceTransformer(
+_model = None
+def get_embedding_model():
+    global _model
+    if _model is None:
+        print("Loading Embedding Model")
+        _model = SentenceTransformer(
             settings.EMBEDDING_MODEL
         )
+    return _model
+class EmbeddingService:
+
+
+
+    def __init__(self):
+        self.model = get_embedding_model()
+
+
 
     def generate_embedding(self, text: str) -> list[float]:
         embedding = self.model.encode(

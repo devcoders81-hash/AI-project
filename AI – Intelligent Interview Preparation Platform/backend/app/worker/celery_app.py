@@ -28,7 +28,7 @@ celery.conf.update(
     task_track_started=True,
 
     worker_prefetch_multiplier=1,
-    worker_concurrency=1
+    worker_concurrency=8
 )
 
 celery.autodiscover_tasks(

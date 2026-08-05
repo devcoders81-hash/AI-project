@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import ResumeTable from "../components/resume/ResumeTable";
 import { getResumes } from "../api/resumeApi";
 import type { Resume } from "../types/resume";
-import { createInterview } from "../api/interviewApi";
 import { useNavigate } from "react-router-dom";
 
 export default function ResumeListPage() {
@@ -27,13 +26,22 @@ export default function ResumeListPage() {
 
   const handleStartInterview = async (resumeId: string) => {
     try {
-      const interview = await createInterview(resumeId);
+      //const interview = await createInterview(resumeId);
 
-      navigate(`/interview/${interview.id}`);
+      navigate(`/interview/${resumeId}`);
     } catch (error) {
       console.error(error);
     }
   };
+  // const handleGenerateInterview = async (resumeId: string) => {
+  //   try {
+  //     const interview = await ge(resumeId);
+
+  //     navigate(`/interview/${interview.id}`);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   if (loading) {
     return <div className="p-10 text-center">Loading...</div>;
@@ -43,7 +51,7 @@ export default function ResumeListPage() {
     <div className="max-w-7xl mx-auto mt-8">
       <h2 className="text-3xl font-bold mb-6">My Resumes</h2>
 
-      <ResumeTable resumes={resumes} onStartInterview={handleStartInterview} />
+      <ResumeTable resumes={resumes} onStartInterview={handleStartInterview} onGenerateInterview={handleStartInterview}/>
     </div>
   );
 }

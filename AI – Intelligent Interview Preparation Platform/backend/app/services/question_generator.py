@@ -1,7 +1,7 @@
 import json
 
 from app.services.embedding_service import EmbeddingService
-from app.services.vector_store_service import vector_store_service
+from app.services.vector_store_service import VectorStoreService
 from app.services.llm_service import llm_service
 
 
@@ -9,6 +9,7 @@ class QuestionGenerator:
 
     def __init__(self):
         self.embedding = EmbeddingService()
+        self.vector_store = VectorStoreService()
 
     def generate_questions(
         self,
@@ -22,7 +23,7 @@ class QuestionGenerator:
             f"{role} skills experience projects"
         )
 
-        results = vector_store_service.search(
+        results = self.vector_store.search(
             resume_id=resume_id,
             embedding=embedding,
             top_k=8,

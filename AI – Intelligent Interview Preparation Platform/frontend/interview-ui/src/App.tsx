@@ -1,8 +1,9 @@
 import AppRouter from "./router/AppRouter";
-import ResumeUploadPage from "./pages/ResumeUploadPage";
- import ResumeListPage from "./pages/ResumeListPage";
+// import ResumeUploadPage from "./pages/ResumeUploadPage";
+//  import ResumeListPage from "./pages/ResumeListPage";
 function App() {
-    return <AppRouter />;
+     return <AppRouter />;
+    
 }
 
 export default App;

@@ -155,20 +155,24 @@ class InterviewService:
     async def get_question(
             self,
             interview_id,
+            user_id
     ):
         try:
 
-            interview = await self.question_repository.get_by_interview(
-                interview_id
+            interview = await self.repository.get_by_resume_user_id(
+                interview_id,user_id
             )
             if interview is None:
                 raise HTTPException(
                     status_code=404,
                     detail="Interview not found",
                 )
-            unanswered_question=interview[0].sequence
+            interview_question_list=await self.question_repository.get_by_interview(
+                interview.id
+            )
+            unanswered_question=interview_question_list[0].sequence
             print(f"unanswered question {unanswered_question}")
-            total_question = interview[-1].sequence
+            total_question = interview_question_list[-1].sequence
             print(f"total_question question {total_question}")
             #total_question=interview_by_desc_sequence.sequence
 
@@ -191,10 +195,10 @@ class InterviewService:
             #     }
             return {
                 "sequence": unanswered_question,
-                "question": interview[0].question,
+                "question": interview_question_list[0].question,
                 #"difficulty": interview[o.difficulty,
-                "completed": interview[0].is_asked,
-                "id": interview[0].id,
+                "completed": interview_question_list[0].is_asked,
+                "id": interview_question_list[0].id,
                 "total_question":total_question
             }
         except Exception as ex:

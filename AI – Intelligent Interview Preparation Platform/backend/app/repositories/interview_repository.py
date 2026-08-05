@@ -22,3 +22,17 @@ class InterviewRepository(BaseRepository[Interview]):
         )
 
         return result.scalars().all()
+
+    async def get_by_resume_user_id(
+        self,
+        resume_id: UUID,
+            user_id: UUID,
+    ):
+        result = await self.db.execute(
+            select(Interview).where(
+                Interview.resume_id == resume_id,
+                Interview.user_id == user_id
+            )
+        )
+
+        return result.scalar_one_or_none()

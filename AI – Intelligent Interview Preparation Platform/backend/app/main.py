@@ -11,6 +11,7 @@ app = FastAPI(
     version=settings.APP_VERSION,
     lifespan=lifespan,
 )
+
 origins = [
     "http://localhost:5173",
 ]

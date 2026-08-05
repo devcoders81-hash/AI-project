@@ -22,7 +22,7 @@ export default function ProtectedRoute({
 
     if(!token){
 
-        return <Navigate to="/"/>;
+        return <Navigate to="/login" replace />;
 
     }
 
